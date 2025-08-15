@@ -1,5 +1,6 @@
 import flet as ft  
-from database_mgr import delete_row, get_all_rows  
+from database_mgr import delete_row, get_all_rows
+from file_mgr import ResumeFile
 
 def main():  
     pass  

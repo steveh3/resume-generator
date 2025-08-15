@@ -1,10 +1,11 @@
 import flet as ft  
-from database_mgr import delete_row, get_all_rows  
+from database_mgr import delete_row, get_all_rows
+from file_mgr import ResumeFile
 
 def main():  
     pass       
 
-def create_generate_page(page):  
+def create_newresume_page(page):  
     def handle_expansion_tile_change(e):  
         page.open(  
             ft.SnackBar(  

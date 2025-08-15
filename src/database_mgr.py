@@ -28,8 +28,7 @@ def create_table():
    sql_script = '''  
         CREATE TABLE IF NOT EXISTS contact_info (  
             contact_id INTEGER PRIMARY KEY AUTOINCREMENT,  
-            first_name TEXT NOT NULL,  
-            last_name TEXT NOT NULL,  
+            name TEXT NOT NULL, 
             phone TEXT,  
             email TEXT,  
             url TEXT  

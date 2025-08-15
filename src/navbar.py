@@ -14,7 +14,7 @@ def create_navbar(page_on_change_handler):
             ft.NavigationBarDestination(  
                 icon=ft.Icons.NOTE_ADD,   
                 selected_icon=ft.Icons.NOTE_ADD_OUTLINED,   
-                label="Generate",  
+                label="New Resume",  
             ),  
             ft.NavigationBarDestination(  
                 icon=ft.Icons.MANAGE_ACCOUNTS,   
