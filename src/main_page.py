@@ -39,10 +39,10 @@ def create_main_page(page):
                     ),  
                 )  
             )  
-        return list_view  
+        return list_view
 
-    return ft.Column([  
-        ft.Text("Welcome to the Home Page!"),  
+    return ft.Column([
+        ft.Text("Resumes"),
         ft.Card(  
             #content=ft.Container(  
             #width=500,  

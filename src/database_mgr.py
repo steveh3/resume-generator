@@ -36,9 +36,9 @@ def create_table():
 
         CREATE TABLE IF NOT EXISTS education (  
             education_id INTEGER PRIMARY KEY AUTOINCREMENT,  
-            edu_name TEXT NOT NULL,  
+            school_name TEXT NOT NULL,  
             start_date DATE NOT NULL,  
-            finish_date DATE,  
+            graduation_date DATE,  
             degree TEXT NOT NULL  
         );  
 
@@ -52,18 +52,18 @@ def create_table():
             skill_name TEXT NOT NULL  
         );  
 
-        CREATE TABLE IF NOT EXISTS history (  
-            history_id INTEGER PRIMARY KEY AUTOINCREMENT,  
-            history_name TEXT NOT NULL,  
+        CREATE TABLE IF NOT EXISTS job_history (  
+            job_id INTEGER PRIMARY KEY AUTOINCREMENT,  
+            company_name TEXT NOT NULL,  
             start_date DATE NOT NULL,  
             finish_date DATE  
         );  
 
-        CREATE TABLE IF NOT EXISTS history_description (  
+        CREATE TABLE IF NOT EXISTS job_description (  
             description_id INTEGER PRIMARY KEY AUTOINCREMENT,  
-            history_id INTEGER NOT NULL,  
+            job_id INTEGER NOT NULL,  
             description TEXT NOT NULL,  
-            FOREIGN KEY (history_id) REFERENCES history(history_id)  
+            FOREIGN KEY (job_id) REFERENCES job_history(job_id)  
         );  
 
         CREATE TABLE IF NOT EXISTS tagging (  
