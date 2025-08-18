@@ -6,7 +6,7 @@ def main():
 
 def create_manage_page(page):  
     def get_options():  
-        content_array = ["Contact", "Summary", "History","Education","Skills","Projects"]  
+        content_array = ["Contact", "Summary", "Job History","Education","Skills","Projects"]  
         options = []  
         for item in content_array:  
             options.append(  
@@ -24,10 +24,10 @@ def create_manage_page(page):
             my_data = ["Contact 1", "Contact 2", "Contact 3","Contact 4"]  
         elif e.control.value == "Summary":  
             my_data = ["Summary 1", "Summary 2", "Summary 3"]  
-        elif e.control.value == "History":  
-            my_data = ["History 1", "History 2", "History 3","History 4"]  
+        elif e.control.value == "Job History":  
+            my_data = ["Job 1", "Job 2", "Job 3"]  
         elif e.control.value == "Education":  
-            my_data = ["Edu 1"]  
+            my_data = ["Education 1", "Certification 1"]  
         elif e.control.value == "Skills":    
             my_data = ["Skills 1", "Skills 2", "Skills 3","Skills 4"]  
         elif e.control.value == "Projects":    
