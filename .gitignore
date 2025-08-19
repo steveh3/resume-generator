@@ -1,6 +1,7 @@
 # app db and settings file
 generator.db
 settings.json
+resume/*.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

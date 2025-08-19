@@ -1,3 +1,10 @@
+# Resume Generator
+
+This application generates a resume from pre-configured pieces with the use of tags.
+
+Python, JSON, Sqlite3, Flet
+
+
 # ResumeGenerator app
 
 ## Run the app
