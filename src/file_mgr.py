@@ -21,12 +21,38 @@ class ResumeFile:
         self.resume_file = Path(path.join(app_data_path, resume_name))  
         self._resume = self._load_resume()  
 
-    def _get_default_file(self) -> dict:  
+    @staticmethod
+    def list_resumes():
+        # List all resume JSON files in the app data directory
+        app_data_path = getenv("FLET_APP_STORAGE_DATA") or getcwd()
+        return [f for f in Path(app_data_path).glob("*.json")]
 
-        # Returns a dictionary of default resume
-        return {  
-            "Status": "Incomplete",  
-            "Tags": [],  
+    @staticmethod
+    def delete_resume(resume_name):
+        # Delete a resume file by name
+        app_data_path = getenv("FLET_APP_STORAGE_DATA") or getcwd()
+        file_path = Path(path.join(app_data_path, resume_name))
+        if file_path.exists():
+            file_path.unlink()
+            return True
+        return False
+
+    @staticmethod
+    def create_resume(resume_name):
+        app_data_path = getenv("FLET_APP_STORAGE_DATA") or getcwd()
+        if not resume_name.lower().endswith(".json"):
+            resume_name += ".json"
+        file_path = Path(path.join(app_data_path, resume_name))
+        default_data = ResumeFile._get_default_file_static()
+        with open(file_path, "w", encoding="utf-8") as f:
+            json.dump(default_data, f, indent=4)
+        return file_path
+
+    @staticmethod
+    def _get_default_file_static():
+        return {
+            "Status": "Incomplete",
+            "Tags": [],
             "Description": None,
             "Theme": None,
             "Contact Info": {
@@ -39,9 +65,7 @@ class ResumeFile:
             "Job History": [],
             "Education": [],
             "Skills": []
-        }  
-
-      
+        }
 
     def _load_resume(self) -> dict:  
 
@@ -52,7 +76,9 @@ class ResumeFile:
                 with open(output_file, "r", encoding="utf-8") as f:  
                     return json.load(f)  
             except json.JSONDecodeError:  
-                print(f"Warning: Settings file '{output_file} is corrupt")  
+                print(f"Warning: Settings file '{output_file}' is corrupt. Resetting to defaults.")
+                self._save_resume()  # Optionally reset to defaults
+                return self._get_default_file()
         else:  
             return self._get_default_file()  
 
@@ -86,10 +112,37 @@ class ResumeFile:
         self._resume[key] = value  
         self._save_resume()  
 
-    def get_all_settings(self) -> dict:  
+    def get_resume(self) -> dict:  
 
         # Returns a copy of all current settings.  
         return self._resume.copy()  
 
+    @staticmethod
+    def rename_resume(old_name, new_name):
+        app_data_path = getenv("FLET_APP_STORAGE_DATA") or getcwd()
+        if not old_name.lower().endswith(".json"):
+            old_name += ".json"
+        if not new_name.lower().endswith(".json"):
+            new_name += ".json"
+        old_path = Path(path.join(app_data_path, old_name))
+        new_path = Path(path.join(app_data_path, new_name))
+        if old_path.exists():
+            old_path.rename(new_path)
+            return True
+        return False
+
+    @staticmethod
+    def get_resume_metadata(resume_name):
+        app_data_path = getenv("FLET_APP_STORAGE_DATA") or getcwd()
+        file_path = Path(path.join(app_data_path, resume_name))
+        if file_path.exists():
+            stat = file_path.stat()
+            return {
+                "size": stat.st_size,
+                "last_modified": stat.st_mtime,
+                "created": stat.st_ctime
+            }
+        return None
+
 if __name__ == "__main__":  
-    main()  
+    main()
