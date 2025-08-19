@@ -121,5 +121,4 @@ def delete_row(id, table):
    connection.close()  
 
 if __name__ == "__main__":  
-
    main()  
