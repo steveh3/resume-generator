@@ -1,6 +1,7 @@
 import flet as ft  
 from database_mgr import delete_row, get_all_rows
 from file_mgr import ResumeFile
+import datetime
 
 def main():  
     pass  
@@ -9,32 +10,32 @@ def create_main_page(page):
     def get_listtile_options():  
 
         # Get DATA here  
-        my_data = ["Item 1", "Item 2", "Item 3","Item 4"]  
+        my_data = ResumeFile.list_resumes()
         list_view = ft.ListView(expand=1, spacing=10, padding=20)  
 
         for item in my_data:  
+            temp_resume = ResumeFile(item)
+            metadata = temp_resume.get_resume_metadata()
+
             list_view.controls.append(  
                 ft.ListTile(  
                     leading=ft.Icon(ft.Icons.NOTE),  
-                    title=ft.Text(  
-                        f"Name of {item}"  
+                    title=ft.Text(item),  
+                    subtitle=ft.Text(
+                        f"Status: {temp_resume.get_setting('Status')}\nModified: {datetime.datetime.fromtimestamp(metadata['modified']).strftime('%Y-%m-%d %H:%M')}"
                     ),  
-                    subtitle=ft.Text(f"Status of {item}."),  
                     trailing=ft.PopupMenuButton(  
                         icon=ft.Icons.MORE_VERT,  
-                        items=[  
-                            ft.PopupMenuItem(  
-                                text="Continue",  
-                                on_click=print("Continue!")),  
+                        items=[   
                             ft.PopupMenuItem(  
                                 text="Modify",  
-                                on_click=print("Modify!")),  
+                                on_click=print("Modify")),  
                             ft.PopupMenuItem(  
                                 text="Save",  
-                                on_click=print("Save!")),  
+                                on_click=print("Save")),  
                             ft.PopupMenuItem(  
                                 text="Delete",  
-                                on_click=print("Delete!")),  
+                                on_click=print("Delete")),  
                         ],  
                     ),  
                 )  
@@ -42,7 +43,7 @@ def create_main_page(page):
         return list_view
 
     return ft.Column([
-        ft.Text("Resumes"),
+        #ft.Text("Resumes"),
         ft.Card(  
             #content=ft.Container(  
             #width=500,  
@@ -58,4 +59,4 @@ def create_main_page(page):
     ])   
 
 if __name__ == "__main__":  
-    main()  
+    main()

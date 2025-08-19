@@ -12,9 +12,7 @@ class ResumeFile:
         # Initializes the AppSettings manager.  
         # Args:  
         #    resume_name: The name of the JSON file.  
-        app_data_path = getenv("FLET_APP_STORAGE_DATA")  
-        if not app_data_path:  
-            app_data_path = getcwd()  
+        app_data_path = get_app_data_path("resumes") 
         if not resume_name.lower().endswith(".json"):
             resume_name += ".json"
 
@@ -23,14 +21,14 @@ class ResumeFile:
 
     @staticmethod
     def list_resumes():
-        # List all resume JSON files in the app data directory
-        app_data_path = getenv("FLET_APP_STORAGE_DATA") or getcwd()
-        return [f for f in Path(app_data_path).glob("*.json")]
+        # List all resume JSON files in the app data directory, return names without .json
+        app_data_path = get_app_data_path("resumes")
+        return [f.stem for f in Path(app_data_path).glob("*.json")]
 
     @staticmethod
     def delete_resume(resume_name):
         # Delete a resume file by name
-        app_data_path = getenv("FLET_APP_STORAGE_DATA") or getcwd()
+        app_data_path = get_app_data_path("resumes")
         file_path = Path(path.join(app_data_path, resume_name))
         if file_path.exists():
             file_path.unlink()
@@ -39,7 +37,7 @@ class ResumeFile:
 
     @staticmethod
     def create_resume(resume_name):
-        app_data_path = getenv("FLET_APP_STORAGE_DATA") or getcwd()
+        app_data_path = get_app_data_path("resumes")
         if not resume_name.lower().endswith(".json"):
             resume_name += ".json"
         file_path = Path(path.join(app_data_path, resume_name))
@@ -119,7 +117,7 @@ class ResumeFile:
 
     @staticmethod
     def rename_resume(old_name, new_name):
-        app_data_path = getenv("FLET_APP_STORAGE_DATA") or getcwd()
+        app_data_path = get_app_data_path("resumes")
         if not old_name.lower().endswith(".json"):
             old_name += ".json"
         if not new_name.lower().endswith(".json"):
@@ -133,7 +131,7 @@ class ResumeFile:
 
     @staticmethod
     def get_resume_metadata(resume_name):
-        app_data_path = getenv("FLET_APP_STORAGE_DATA") or getcwd()
+        app_data_path = get_app_data_path("resumes")
         file_path = Path(path.join(app_data_path, resume_name))
         if file_path.exists():
             stat = file_path.stat()
@@ -143,6 +141,24 @@ class ResumeFile:
                 "created": stat.st_ctime
             }
         return None
+
+    def get_resume_metadata(self):
+        if Path(self.resume_file).exists():
+            stat = Path(self.resume_file).stat()
+            return {
+                "size": stat.st_size,
+                "modified": stat.st_mtime,
+                "created": stat.st_ctime
+            }
+        return None
+
+def get_app_data_path(subfolder=None):
+    base_path = getenv("FLET_APP_STORAGE_DATA") or getcwd()
+    if subfolder:
+        full_path = path.join(base_path, subfolder)
+        Path(full_path).mkdir(parents=True, exist_ok=True)  # Ensure subfolder exists
+        return full_path
+    return base_path
 
 if __name__ == "__main__":  
     main()
