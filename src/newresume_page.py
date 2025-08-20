@@ -27,7 +27,7 @@ def create_newresume_page(page):
         print("Button clicked inside expanded tile!")  
 
     return ft.Column([  
-        ft.Text("Generate Page Content"),  
+        #ft.Text("Generate Page Content"),  
         ft.Row([  
             ft.FilledTonalButton("New", icon=ft.Icons.ADD_OUTLINED),  
             ft.FilledTonalButton("Save", icon=ft.Icons.SAVE_AS_OUTLINED),  
