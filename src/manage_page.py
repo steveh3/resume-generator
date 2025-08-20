@@ -69,7 +69,7 @@ def create_manage_page(page):
     )  
 
     return ft.Column([  
-        ft.Text("Manage Page Content"),  
+        #ft.Text("Manage Page Content"),  
         ft.Dropdown(  
                     editable=True,  
                     label="Select an Option",  
