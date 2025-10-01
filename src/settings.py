@@ -24,7 +24,7 @@ class AppSettings:
         return {  
             "Author": "Steve",  
             "Version": "0.1.0",  
-            "Setting1": "True",  
+            "FirstRun": "False",  
             "Setting2": "False",  
         }      
 

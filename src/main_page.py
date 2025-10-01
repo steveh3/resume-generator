@@ -49,13 +49,14 @@ def create_main_page(page):
             #width=500,  
             content=ft.Column(  
                 [  
-                    get_listtile_options()  
+                    get_listtile_options(),
                 ],  
                 spacing=0,  
             ),  
             #padding=ft.padding.symmetric(vertical=10),  
             #)  
-        )  
+        ),
+        ft.FilledTonalButton("Exit", on_click=lambda _: page.window.close())  
     ])   
 
 if __name__ == "__main__":  

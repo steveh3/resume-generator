@@ -5,9 +5,33 @@ from main_page import create_main_page
 from newresume_page import create_newresume_page  
 from manage_page import create_manage_page  
 from settings_page import create_settings_page  
+from settings import AppSettings
 
 def main(page: ft.Page):  
     create_table()  
+
+    # Get FirstRun settings
+    settings = AppSettings() 
+    first_run = settings.get_setting("FirstRun")
+
+    # Define first run dialog
+    first_run_dialog = ft.AlertDialog(
+        title=ft.Text("Welcome!"),
+        content=ft.Text("Thank you for using Resume Generator. This message appears only on your first launch."),
+        actions=[
+            ft.TextButton(
+                "OK",
+                on_click=lambda e: (
+                    settings.set_setting("FirstRun", True),
+                    setattr(first_run_dialog, "open", False),
+                    page.update()
+                )
+            )
+        ],
+        actions_alignment=ft.MainAxisAlignment.END,
+        open=True,
+    )
+    
 
     # Navbar on_change handler  
     def handle_navbar_change(e):  
@@ -37,5 +61,11 @@ def main(page: ft.Page):
     page.on_route_change = route_change  
     page.go(page.route)  
 
+    # Show dialog if first run
+    if not first_run:
+        page.open(first_run_dialog)
+        first_run_dialog.open = True
+        page.update()
+
 if __name__ == "__main__":  
-    ft.app(main)  
+    ft.app(main)

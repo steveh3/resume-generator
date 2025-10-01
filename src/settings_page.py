@@ -15,8 +15,8 @@ def create_settings_page(page):
         ft.Text(f"Version: {settings.get_setting("Version")}"),  
         ft.Divider(),  
         ft.Switch(  
-            label="Setting1",  
-            value=settings.get_setting("Setting1"),  
+            label="FirstRun",  
+            value=settings.get_setting("FirstRun"),  
             on_change=change_setting,  
         ),  
         ft.Switch(  
