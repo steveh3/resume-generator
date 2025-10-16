@@ -17,7 +17,7 @@ def main(page: ft.Page):
     # Define first run dialog
     first_run_dialog = ft.AlertDialog(
         title=ft.Text("Welcome!"),
-        content=ft.Text("Thank you for using Resume Generator. This message appears only on your first launch."),
+        content=ft.Text("Thank you for using Resume Generator!\n\nUse the 'New Resume' tab to start building a resume.\nUse the 'Manage' tab to add individual elements."),
         actions=[
             ft.TextButton(
                 "OK",
