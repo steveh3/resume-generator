@@ -70,6 +70,12 @@ def create_manage_page(page):
 
     return ft.Column([  
         #ft.Text("Manage Page Content"),  
+        ft.Row([  
+            ft.FilledTonalButton("New", icon=ft.Icons.ADD_OUTLINED),  
+            ft.FilledTonalButton("Save", icon=ft.Icons.SAVE_AS_OUTLINED),  
+            ft.FilledTonalButton("Export", icon=ft.Icons.IMPORT_EXPORT_OUTLINED),  
+            ft.FilledTonalButton("Exit", icon=ft.Icons.EXIT_TO_APP, on_click=lambda _: page.window.close())             
+        ]), 
         ft.Dropdown(  
                     editable=True,  
                     label="Select an Option",  

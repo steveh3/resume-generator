@@ -93,12 +93,12 @@ def get_all_rows(table):
    connection.close()  
    return rows  
 
-def insert_item(name, quantity):  
+def insert_skill(name):  
 
    # Inserts a new item into the 'items' table  
    connection = get_db_connection()  
    cursor = connection.cursor()  
-   cursor.execute("INSERT INTO items (name, quantity) VALUES (?, ?)", (name, quantity))  
+   cursor.execute("INSERT INTO skill (skill_name) VALUES (?)", (name))  
    connection.commit()  
    connection.close()  
 

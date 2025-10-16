@@ -56,7 +56,7 @@ def create_main_page(page):
             #padding=ft.padding.symmetric(vertical=10),  
             #)  
         ),
-        ft.FilledTonalButton("Exit", on_click=lambda _: page.window.close())  
+        ft.FilledTonalButton("Exit", icon=ft.Icons.EXIT_TO_APP, on_click=lambda _: page.window.close())  
     ])   
 
 if __name__ == "__main__":  
