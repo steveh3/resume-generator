@@ -44,6 +44,11 @@ def create_main_page(page):
 
     return ft.Column([
         #ft.Text("Resumes"),
+        ft.Row([  
+            ft.FilledTonalButton("Exit", icon=ft.Icons.EXIT_TO_APP, on_click=lambda _: page.window.close())              
+        ],
+        alignment=ft.MainAxisAlignment.CENTER,),
+        ft.Divider(),  
         ft.Card(  
             #content=ft.Container(  
             #width=500,  
@@ -56,7 +61,6 @@ def create_main_page(page):
             #padding=ft.padding.symmetric(vertical=10),  
             #)  
         ),
-        ft.FilledTonalButton("Exit", icon=ft.Icons.EXIT_TO_APP, on_click=lambda _: page.window.close())  
     ])   
 
 if __name__ == "__main__":  

@@ -195,10 +195,10 @@ def create_manage_page(page):
     return ft.Column([
         ft.Row([
             ft.FilledTonalButton("New", icon=ft.Icons.ADD_OUTLINED, on_click=load_newwindow),
-            ft.FilledTonalButton("Save", icon=ft.Icons.SAVE_AS_OUTLINED),
-            ft.FilledTonalButton("Export", icon=ft.Icons.IMPORT_EXPORT_OUTLINED),
             ft.FilledTonalButton("Exit", icon=ft.Icons.EXIT_TO_APP, on_click=lambda _: page.window.close())
-        ]),
+        ],
+        alignment=ft.MainAxisAlignment.CENTER,),
+        ft.Divider(),  
         dropdown,
         ft.Card(
             content=ft.Column(
