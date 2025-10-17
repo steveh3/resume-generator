@@ -83,42 +83,243 @@ def create_table():
    connection.commit()  
    connection.close()  
 
-def get_all_rows(table):  
+# --- Helper / safe utilities ---
+_VALID_TABLES = {
+    "contact_info",
+    "education",
+    "summary",
+    "skill",
+    "job_history",
+    "job_description",
+    "tagging",
+    "tags",
+}
 
-   # Retrieves all rwos from table.  
-   connection = get_db_connection()  
-   cursor = connection.cursor()  
-   cursor.execute("SELECT * FROM ?", (table))  
-   rows = cursor.fetchall()  
-   connection.close()  
-   return rows  
+def _validate_table_name(table: str):
+    if table not in _VALID_TABLES:
+        raise ValueError(f"Invalid table name: {table}")
 
-def insert_skill(name):  
+def _row_to_dict(row):
+    if row is None:
+        return None
+    return dict(row)
 
-   # Inserts a new item into the 'items' table  
-   connection = get_db_connection()  
-   cursor = connection.cursor()  
-   cursor.execute("INSERT INTO skill (skill_name) VALUES (?)", (name))  
-   connection.commit()  
-   connection.close()  
+# --- CRUD functions for specific tables ---
 
-def update_item_quantity(item_id, new_quantity):  
+# contact_info
+def add_contact(name: str, phone: str = None, email: str = None, url: str = None) -> int:
+    """Insert a contact_info row. Returns the inserted contact_id."""
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO contact_info (name, phone, email, url) VALUES (?, ?, ?, ?)",
+        (name, phone, email, url),
+    )
+    conn.commit()
+    contact_id = cur.lastrowid
+    conn.close()
+    return contact_id
 
-   # Updates the quantity of a specific item.  
-   connection = get_db_connection()  
-   cursor = connection.cursor()  
-   cursor.execute("UPDATE items SET quantity = ? WHERE id = ?", (new_quantity, item_id))  
-   connection.commit()  
-   connection.close()  
+def get_contacts() -> list:
+    """Return all contacts as list of dicts."""
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM contact_info ORDER BY contact_id")
+    rows = cur.fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
 
-def delete_row(id, table):  
+def get_contact(contact_id: int) -> dict | None:
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM contact_info WHERE contact_id = ?", (contact_id,))
+    row = cur.fetchone()
+    conn.close()
+    return _row_to_dict(row)
 
-   # Deletes row from a table.  
-   connection = get_db_connection()  
-   cursor = connection.cursor()  
-   cursor.execute("DELETE FROM ? WHERE id = ?", (table, id,))  
-   connection.commit()  
-   connection.close()  
+# education
+def add_education(school_name: str, start_date: str, degree: str, graduation_date: str = None) -> int:
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO education (school_name, start_date, graduation_date, degree) VALUES (?, ?, ?, ?)",
+        (school_name, start_date, graduation_date, degree),
+    )
+    conn.commit()
+    education_id = cur.lastrowid
+    conn.close()
+    return education_id
+
+def get_education() -> list:
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM education ORDER BY education_id")
+    rows = cur.fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+def get_education_by_id(education_id: int) -> dict | None:
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM education WHERE education_id = ?", (education_id,))
+    row = cur.fetchone()
+    conn.close()
+    return _row_to_dict(row)
+
+# summary
+def add_summary(summary_text: str) -> int:
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO summary (summary_text) VALUES (?)",
+        (summary_text,),
+    )
+    conn.commit()
+    summary_id = cur.lastrowid
+    conn.close()
+    return summary_id
+
+def get_summaries() -> list:
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM summary ORDER BY summary_id")
+    rows = cur.fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+def get_summary(summary_id: int) -> dict | None:
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM summary WHERE summary_id = ?", (summary_id,))
+    row = cur.fetchone()
+    conn.close()
+    return _row_to_dict(row)
+
+# skill
+def add_skill(skill_name: str) -> int:
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO skill (skill_name) VALUES (?)",
+        (skill_name,),
+    )
+    conn.commit()
+    skill_id = cur.lastrowid
+    conn.close()
+    return skill_id
+
+def get_skills() -> list:
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM skill ORDER BY skill_id")
+    rows = cur.fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+def get_skill(skill_id: int) -> dict | None:
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM skill WHERE skill_id = ?", (skill_id,))
+    row = cur.fetchone()
+    conn.close()
+    return _row_to_dict(row)
+
+# job_history and job_description
+def add_job_history(company_name: str, start_date: str, finish_date: str = None) -> int:
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO job_history (company_name, start_date, finish_date) VALUES (?, ?, ?)",
+        (company_name, start_date, finish_date),
+    )
+    conn.commit()
+    job_id = cur.lastrowid
+    conn.close()
+    return job_id
+
+def add_job_description(job_id: int, description: str) -> int:
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO job_description (job_id, description) VALUES (?, ?)",
+        (job_id, description),
+    )
+    conn.commit()
+    description_id = cur.lastrowid
+    conn.close()
+    return description_id
+
+def get_job_history() -> list:
+    """Return all jobs (without descriptions)."""
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM job_history ORDER BY job_id")
+    rows = cur.fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+def get_job_with_descriptions(job_id: int) -> dict | None:
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM job_history WHERE job_id = ?", (job_id,))
+    job_row = cur.fetchone()
+    if job_row is None:
+        conn.close()
+        return None
+    cur.execute("SELECT * FROM job_description WHERE job_id = ? ORDER BY description_id", (job_id,))
+    desc_rows = cur.fetchall()
+    conn.close()
+    job = dict(job_row)
+    job["descriptions"] = [dict(d) for d in desc_rows]
+    return job
+
+def get_job_descriptions(job_id: int) -> list:
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM job_description WHERE job_id = ? ORDER BY description_id", (job_id,))
+    rows = cur.fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+# --- Updated generic helpers (safe table usage) ---
+def get_all_rows(table: str) -> list:
+   """Return all rows from a validated table name as list of dicts."""
+   _validate_table_name(table)
+   conn = get_db_connection()
+   cur = conn.cursor()
+   query = f"SELECT * FROM {table} ORDER BY 1"
+   cur.execute(query)
+   rows = cur.fetchall()
+   conn.close()
+   return [dict(r) for r in rows]
+
+
+def delete_row(id, table: str, id_column: str = None):
+   """Delete a row by id from a validated table.
+      id_column can be supplied when the primary key column is not 'id' (use full column name)."""
+   _validate_table_name(table)
+   conn = get_db_connection()
+   cur = conn.cursor()
+   # Determine column name
+   if id_column:
+       col = id_column
+   else:
+       # default heuristics based on table name
+       col_map = {
+           "contact_info": "contact_id",
+           "education": "education_id",
+           "summary": "summary_id",
+           "skill": "skill_id",
+           "job_history": "job_id",
+           "job_description": "description_id",
+           "tagging": "tagging_id",
+           "tags": "tag_id",
+       }
+       col = col_map.get(table, "id")
+   query = f"DELETE FROM {table} WHERE {col} = ?"
+   cur.execute(query, (id,))
+   conn.commit()
+   conn.close()  
 
 if __name__ == "__main__":  
-   main()  
+   main()
